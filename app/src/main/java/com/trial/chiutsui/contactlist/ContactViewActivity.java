@@ -1,15 +1,21 @@
 package com.trial.chiutsui.contactlist;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.ToolbarWidgetWrapper;
+import android.util.Log;
 import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.ExtractedText;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,8 +24,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ContactViewActivity extends AppCompatActivity {
+
+    public static final String EXTRA = "CVA Extra";
+
+    private int mColor;
+
+    private Contact mContact;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +41,7 @@ public class ContactViewActivity extends AppCompatActivity {
 
         RelativeLayout contactViewHeader = (RelativeLayout) findViewById(R.id.contact_view_header);
 
-        Contact contact = (Contact) getIntent().getSerializableExtra(ContactListActivity.EXTRA);
+        mContact = (Contact) getIntent().getSerializableExtra(ContactListActivity.EXTRA);
 
         ImageView mainImg = (ImageView) findViewById(R.id.mainImage);
         Display dis = getWindowManager().getDefaultDisplay();
@@ -41,7 +54,7 @@ public class ContactViewActivity extends AppCompatActivity {
         contactViewHeader.setLayoutParams(new LinearLayout.LayoutParams(width,(int) (width*9/16)));
 
         TextView nameText = (TextView) findViewById(R.id.contact_name);
-        nameText.setText(contact.getName());
+        nameText.setText(mContact.getName());
 
         Toolbar tb = (Toolbar) findViewById(R.id.contact_view_toolbar);
         tb.inflateMenu(R.menu.contact_view_menu);
@@ -49,6 +62,9 @@ public class ContactViewActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 if (item.getItemId()==R.id.contact_view_edit) {
+                    Intent intent = new Intent(ContactViewActivity.this, ContactEditActivity.class);
+                    intent.putExtra(EXTRA,mContact);
+                    startActivity(intent);
                     return true;
                 }
                 return false;
@@ -56,7 +72,11 @@ public class ContactViewActivity extends AppCompatActivity {
         });
 
         ListView contactListInfo = (ListView) findViewById(R.id.contact_view_fields);
-        contactListInfo.setAdapter(new FieldAdapter(contact.phoneNumbers,contact.email));
+        contactListInfo.setAdapter(new FieldAdapter(mContact.phoneNumbers,mContact.email));
+
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.mipmap.sunset);
+        Palette p = Palette.from(bitmap).generate();
+        mColor = p.getDarkVibrantColor(p.getDarkMutedColor(mColor));
     }
 
     private class FieldAdapter extends BaseAdapter {
@@ -82,10 +102,27 @@ public class ContactViewActivity extends AppCompatActivity {
             TextView fieldText = (TextView) convertView.findViewById(R.id.contact_view_row_field);
 
             String value = (String) getItem(position);
-
             fieldText.setText(value);
 
+            ImageView fieldIcon = (ImageView) convertView.findViewById(R.id.contact_view_row_field_icon);
+            if (isFirst(position)) {
+                if (isEmail(position)) {
+                    fieldIcon.setImageResource(R.drawable.ic_email);
+                } else {
+                    fieldIcon.setImageResource(R.drawable.ic_call);
+                }
+            }
+
+            fieldIcon.setColorFilter(mColor);
+
             return convertView;
+        }
+
+        private boolean isFirst(int position) {
+            if ((position == 0)||(position == phoneNumbers.size())) {
+                return true;
+            }
+            return false;
         }
 
         @Override
