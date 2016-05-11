@@ -17,14 +17,16 @@ public class ContactListActivity extends AppCompatActivity {
 
     public static final String EXTRA = "CONTACT";
 
-    private ArrayList<Contact> mContacts;
+    private ContactList mContacts;
+
+    private contactAdapter mContactAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_list);
 
-        mContacts = new ArrayList<Contact>();
+        mContacts = ContactList.getInstance();
 
         for (int i=0; i<=30; i++) {
             Contact c1 = new Contact();
@@ -38,7 +40,8 @@ public class ContactListActivity extends AppCompatActivity {
         }
 
         ListView contactListView = (ListView) findViewById(R.id.contactListView);
-        contactListView.setAdapter(new contactAdapter(mContacts));
+        mContactAdapter = new contactAdapter(mContacts);
+        contactListView.setAdapter(mContactAdapter);
 
         contactListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             int previousFirstItem = 0;
@@ -63,15 +66,20 @@ public class ContactListActivity extends AppCompatActivity {
         contactListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Contact contact = mContacts.get(i);
-
                 Intent intent = new Intent(ContactListActivity.this, ContactViewActivity.class);
 
-                intent.putExtra(EXTRA, contact);
+                intent.putExtra(EXTRA, i);
 
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        mContactAdapter.notifyDataSetChanged();
     }
 
     private class contactAdapter extends ArrayAdapter<Contact> {

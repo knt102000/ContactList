@@ -34,6 +34,12 @@ public class ContactViewActivity extends AppCompatActivity {
 
     private Contact mContact;
 
+    private int mPosition;
+
+    private TextView mNameText;
+
+    private FieldAdapter mAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +47,9 @@ public class ContactViewActivity extends AppCompatActivity {
 
         RelativeLayout contactViewHeader = (RelativeLayout) findViewById(R.id.contact_view_header);
 
-        mContact = (Contact) getIntent().getSerializableExtra(ContactListActivity.EXTRA);
+        mPosition = getIntent().getIntExtra(ContactListActivity.EXTRA, 0);
+
+        mContact = ContactList.getInstance().get(mPosition);
 
         ImageView mainImg = (ImageView) findViewById(R.id.mainImage);
         Display dis = getWindowManager().getDefaultDisplay();
@@ -53,8 +61,7 @@ public class ContactViewActivity extends AppCompatActivity {
 
         contactViewHeader.setLayoutParams(new LinearLayout.LayoutParams(width,(int) (width*9/16)));
 
-        TextView nameText = (TextView) findViewById(R.id.contact_name);
-        nameText.setText(mContact.getName());
+        mNameText = (TextView) findViewById(R.id.contact_name);
 
         Toolbar tb = (Toolbar) findViewById(R.id.contact_view_toolbar);
         tb.inflateMenu(R.menu.contact_view_menu);
@@ -63,7 +70,7 @@ public class ContactViewActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 if (item.getItemId()==R.id.contact_view_edit) {
                     Intent intent = new Intent(ContactViewActivity.this, ContactEditActivity.class);
-                    intent.putExtra(EXTRA,mContact);
+                    intent.putExtra(EXTRA,mPosition);
                     startActivity(intent);
                     return true;
                 }
@@ -72,11 +79,26 @@ public class ContactViewActivity extends AppCompatActivity {
         });
 
         ListView contactListInfo = (ListView) findViewById(R.id.contact_view_fields);
-        contactListInfo.setAdapter(new FieldAdapter(mContact.phoneNumbers,mContact.email));
+        mAdapter = new FieldAdapter(mContact.phoneNumbers,mContact.email);
+        contactListInfo.setAdapter(mAdapter);
 
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.mipmap.sunset);
         Palette p = Palette.from(bitmap).generate();
         mColor = p.getDarkVibrantColor(p.getDarkMutedColor(mColor));
+
+        updateUI();
+    }
+
+    private void updateUI() {
+        mNameText.setText(mContact.getName());
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        updateUI();
     }
 
     private class FieldAdapter extends BaseAdapter {
