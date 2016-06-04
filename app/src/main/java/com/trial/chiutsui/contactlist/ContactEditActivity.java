@@ -14,6 +14,8 @@ import java.util.ArrayList;
 
 public class ContactEditActivity extends AppCompatActivity {
 
+    public static final String EXTRA = "CVA Extra";
+
     private Contact mContact;
 
     @Override
@@ -21,7 +23,7 @@ public class ContactEditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_edit);
 
-        int position = getIntent().getIntExtra(ContactViewActivity.EXTRA, 0);
+        int position = getIntent().getIntExtra(EXTRA, 0);
         mContact = ContactList.getInstance().get(position);
 
         EditText mEditName = (EditText) findViewById(R.id.edit_name);

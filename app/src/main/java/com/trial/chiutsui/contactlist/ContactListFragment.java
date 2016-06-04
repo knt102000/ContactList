@@ -25,8 +25,6 @@ import java.util.ArrayList;
  */
 public class ContactListFragment extends android.app.Fragment {
 
-    public static final String EXTRA = "CONTACT";
-
     private ContactList mContacts;
 
     private contactAdapter mContactAdapter;
@@ -86,7 +84,7 @@ public class ContactListFragment extends android.app.Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getActivity(), ContactViewActivity.class);
 
-                intent.putExtra(EXTRA, i);
+                intent.putExtra(ContactViewActivity.EXTRA, i);
 
                 startActivity(intent);
             }
