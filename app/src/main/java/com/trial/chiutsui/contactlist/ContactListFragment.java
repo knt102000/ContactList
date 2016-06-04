@@ -23,7 +23,7 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ContactListFragment extends Fragment {
+public class ContactListFragment extends android.app.Fragment {
 
     public static final String EXTRA = "CONTACT";
 

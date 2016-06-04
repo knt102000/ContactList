@@ -47,7 +47,7 @@ public class ContactViewActivity extends AppCompatActivity {
 
         RelativeLayout contactViewHeader = (RelativeLayout) findViewById(R.id.contact_view_header);
 
-        mPosition = getIntent().getIntExtra(ContactListActivity.EXTRA, 0);
+        mPosition = getIntent().getIntExtra(ContactListFragment.EXTRA, 0);
 
         mContact = ContactList.getInstance().get(mPosition);
 
