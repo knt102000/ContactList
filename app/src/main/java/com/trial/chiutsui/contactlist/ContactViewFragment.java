@@ -50,6 +50,11 @@ public class ContactViewFragment extends android.app.Fragment {
 
     public void setPosition(int position) {
         mPosition = position;
+        if (mAdapter != null) {
+            mContact = ContactList.getInstance().get(mPosition);
+            mAdapter.setContact(mContact);
+            updateUI();
+        }
     }
 
     @Override
@@ -80,7 +85,7 @@ public class ContactViewFragment extends android.app.Fragment {
         });
 
         ListView contactListInfo = (ListView) v.findViewById(R.id.contact_view_fields);
-        mAdapter = new FieldAdapter(mContact.phoneNumbers,mContact.email);
+        mAdapter = new FieldAdapter(mContact);
         contactListInfo.setAdapter(mAdapter);
 
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.mipmap.sunset);
@@ -108,9 +113,13 @@ public class ContactViewFragment extends android.app.Fragment {
         ArrayList<String> phoneNumbers;
         ArrayList<String> emails;
 
-        FieldAdapter(ArrayList<String> phoneNumbers, ArrayList<String> emails) {
-            this.phoneNumbers=phoneNumbers;
-            this.emails=emails;
+        FieldAdapter(Contact contact) {
+            this.setContact(contact);
+        }
+
+        public void setContact(Contact contact) {
+            this.phoneNumbers=contact.phoneNumbers;
+            this.emails=contact.email;
         }
 
         @Override

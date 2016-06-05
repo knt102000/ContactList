@@ -51,9 +51,9 @@ public class ContactListFragment extends android.app.Fragment {
             c1.setName("Steve");
             c1.email = new ArrayList<String>();
             c1.phoneNumbers = new ArrayList<String>();
-            c1.email.add("myemail@gmail.com");
-            c1.email.add("testemail@gmail.com");
-            c1.phoneNumbers.add("1800MYLEMONS");
+            c1.email.add("myemail@gmail.com"+i);
+            c1.email.add("testemail@gmail.com"+i);
+            c1.phoneNumbers.add("1800MYLEMONS"+i);
             mContacts.add(c1);
         }
 

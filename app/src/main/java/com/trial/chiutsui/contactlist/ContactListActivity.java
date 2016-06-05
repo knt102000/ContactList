@@ -45,10 +45,15 @@ public class ContactListActivity extends ActionBarActivity implements ContactLis
 
     @Override
     public void selectedPosition(int position) {
-        Intent intent = new Intent(this, ContactViewActivity.class);
+        if (mContactViewFragment == null) {
+            Intent intent = new Intent(this, ContactViewActivity.class);
 
-        intent.putExtra(ContactViewActivity.EXTRA, position);
+            intent.putExtra(ContactViewActivity.EXTRA, position);
 
-        startActivity(intent);
+            startActivity(intent);
+        } else {
+            mContactViewFragment.setPosition(position);
+        }
+
     }
 }
