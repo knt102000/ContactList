@@ -1,6 +1,8 @@
 package com.trial.chiutsui.contactlist;
 
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -28,6 +30,8 @@ public class ContactListFragment extends android.app.Fragment {
     private ContactList mContacts;
 
     private contactAdapter mContactAdapter;
+
+    private Contract mContract;
 
     public ContactListFragment() {
         // Required empty public constructor
@@ -82,15 +86,31 @@ public class ContactListFragment extends android.app.Fragment {
         contactListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getActivity(), ContactViewActivity.class);
-
-                intent.putExtra(ContactViewActivity.EXTRA, i);
-
-                startActivity(intent);
+                if (mContract != null){
+                    mContract.selectedPosition(i);
+                }
             }
         });
 
         return v;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+            mContract = (Contract) getActivity();
+        } catch (ClassCastException e) {
+            throw new IllegalStateException("Activity does not implement contract");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+        mContract=null;
     }
 
     @Override
@@ -122,6 +142,10 @@ public class ContactListFragment extends android.app.Fragment {
 
             return convertView;
         }
+    }
+
+    public interface Contract {
+        public void selectedPosition(int position);
     }
 
 }

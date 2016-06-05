@@ -28,7 +28,7 @@ import java.util.List;
 
 public class ContactViewActivity extends AppCompatActivity {
 
-    public static final String EXTRA = ContactViewFragment.EXTRA;
+    public static final String EXTRA = "CONTACT";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +37,7 @@ public class ContactViewActivity extends AppCompatActivity {
 
         if (getFragmentManager().findFragmentById(R.id.view_fragment_container)==null) {
             ContactViewFragment cvf = new ContactViewFragment();
-            cvf.setArguments(getIntent().getExtras());
+            cvf.setPosition(getIntent().getIntExtra(EXTRA,0));
             getFragmentManager().beginTransaction()
                     .add(R.id.view_fragment_container, cvf)
                     .commit();

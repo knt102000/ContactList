@@ -34,8 +34,6 @@ import java.util.List;
  */
 public class ContactViewFragment extends android.app.Fragment {
 
-    public static final String EXTRA = "CONTACT";
-
     private int mColor;
 
     private Contact mContact;
@@ -50,14 +48,15 @@ public class ContactViewFragment extends android.app.Fragment {
         // Required empty public constructor
     }
 
+    public void setPosition(int position) {
+        mPosition = position;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_contact_view, container, false);
-
-        mPosition = getArguments().getInt(EXTRA, 0);
 
         mContact = ContactList.getInstance().get(mPosition);
 
