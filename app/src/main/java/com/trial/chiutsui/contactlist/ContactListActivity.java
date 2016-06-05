@@ -1,6 +1,7 @@
 package com.trial.chiutsui.contactlist;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,7 +14,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class ContactListActivity extends AppCompatActivity {
+public class ContactListActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
