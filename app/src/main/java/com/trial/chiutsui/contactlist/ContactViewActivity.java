@@ -26,7 +26,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContactViewActivity extends AppCompatActivity {
+public class ContactViewActivity extends AppCompatActivity implements ContactViewFragment.Contract{
 
     public static final String EXTRA = "CONTACT";
 
@@ -42,5 +42,12 @@ public class ContactViewActivity extends AppCompatActivity {
                     .add(R.id.view_fragment_container, cvf)
                     .commit();
         }
+    }
+
+    @Override
+    public void selectEditPosition(int position) {
+        Intent intent = new Intent(this, ContactEditActivity.class);
+        intent.putExtra(ContactEditActivity.EXTRA,position);
+        startActivity(intent);
     }
 }

@@ -1,9 +1,6 @@
 package com.trial.chiutsui.contactlist;
 
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -25,13 +22,11 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ContactListFragment extends android.app.Fragment {
+public class ContactListFragment extends ContractFragment<ContactListFragment.Contract> {
 
     private ContactList mContacts;
 
     private contactAdapter mContactAdapter;
-
-    private Contract mContract;
 
     public ContactListFragment() {
         // Required empty public constructor
@@ -86,8 +81,8 @@ public class ContactListFragment extends android.app.Fragment {
         contactListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (mContract != null){
-                    mContract.selectedPosition(i);
+                if (getContract() != null){
+                    getContract().selectedPosition(i);
                 }
             }
         });
@@ -95,23 +90,7 @@ public class ContactListFragment extends android.app.Fragment {
         return v;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
 
-        try {
-            mContract = (Contract) getActivity();
-        } catch (ClassCastException e) {
-            throw new IllegalStateException("Activity does not implement contract");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-
-        mContract=null;
-    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

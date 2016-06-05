@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class ContactListActivity extends ActionBarActivity implements ContactListFragment.Contract{
+public class ContactListActivity extends ActionBarActivity implements ContactListFragment.Contract, ContactViewFragment.Contract {
     private ContactListFragment mContactListFragment;
     private ContactViewFragment mContactViewFragment;
 
@@ -55,5 +55,12 @@ public class ContactListActivity extends ActionBarActivity implements ContactLis
             mContactViewFragment.setPosition(position);
         }
 
+    }
+
+    @Override
+    public void selectEditPosition(int position) {
+        Intent intent = new Intent(this, ContactEditActivity.class);
+        intent.putExtra(ContactEditActivity.EXTRA,position);
+        startActivity(intent);
     }
 }

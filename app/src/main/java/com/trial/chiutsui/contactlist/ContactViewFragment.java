@@ -1,5 +1,6 @@
 package com.trial.chiutsui.contactlist;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -32,7 +33,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ContactViewFragment extends android.app.Fragment {
+public class ContactViewFragment extends ContractFragment<ContactViewFragment.Contract> {
 
     private int mColor;
 
@@ -75,9 +76,9 @@ public class ContactViewFragment extends android.app.Fragment {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 if (item.getItemId()==R.id.contact_view_edit) {
-                    Intent intent = new Intent(getActivity(), ContactEditActivity.class);
-                    intent.putExtra(ContactEditActivity.EXTRA,mPosition);
-                    startActivity(intent);
+                    if (getContract() != null) {
+                        getContract().selectEditPosition(mPosition);
+                    }
                     return true;
                 }
                 return false;
@@ -179,5 +180,9 @@ public class ContactViewFragment extends android.app.Fragment {
             }
             return false;
         }
+    }
+
+    public interface Contract {
+        public void selectEditPosition(int position);
     }
 }
